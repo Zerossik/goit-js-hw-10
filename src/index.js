@@ -1,20 +1,18 @@
 import './css/styles.css';
-import Debounce from "lodash.debounce"
+import Debounce from 'lodash.debounce';
+import { getDate } from './fetchcountries';
 
 const DEBOUNCE_DELAY = 300;
-const inputEl = document.querySelector('#search-box')
-let inputValue = '';
+const inputEl = document.querySelector('#search-box');
 
-function hendlerInputValue (evt) {
-    if(inputEl.value === ''){
-        return
-    }
-}
+function hendlerInputValue() {
+  if (inputEl.value === '') {
+    return;
+  }
 
-function getDate (){ 
-    fetch(`https://restcountries.com/v3.1/name/${inputValue}`)
-    .then((response) => response.json())
-    .then((data) => console.log(data))
+  getDate(inputEl.value).then(response => {
+    console.log(response);
+  });
 }
 
 // Получить доступ к инпуту, и повесить на него событие input/ Событие должно срабатывать не чаще 300мс.
@@ -29,4 +27,4 @@ function getDate (){
 // После выполнения вышеперечисленного, обрабатываем ошибки.
 
 // необходимые либы - lodash.debounce, notiflix
-inputEl.addEventListener('input', Debounce(hendlerInputValue, 300))
+inputEl.addEventListener('input', Debounce(hendlerInputValue, DEBOUNCE_DELAY));
