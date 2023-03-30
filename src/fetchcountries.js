@@ -1,5 +1,7 @@
 export function getDate(name) {
-  fetch(`https://restcountries.com/v3.1/name/${name}`).then(response => {
+  return fetch(
+    `https://restcountries.com/v3.1/name/${name}?fields=flags,name`
+  ).then(response => {
     if (!response.ok) {
       throw new Error(response.status);
     }

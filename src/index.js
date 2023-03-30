@@ -1,17 +1,38 @@
 import './css/styles.css';
 import Debounce from 'lodash.debounce';
 import { getDate } from './fetchcountries';
+// import { Report } from 'notiflix/build/notiflix-report-aio';
+import { Notify } from 'notiflix';
 
 const DEBOUNCE_DELAY = 300;
 const inputEl = document.querySelector('#search-box');
+const listEl = document.querySelector('.country-list');
 
 function hendlerInputValue() {
   if (inputEl.value === '') {
     return;
   }
 
-  getDate(inputEl.value).then(response => {
-    console.log(response);
+  getDate(inputEl.value.tream()).then(data => {
+    if (data.length > 10) {
+      Notify.info('Too many matches found. Please enter a more specific name.');
+      return;
+    } else if (data.length >= 2) {
+      console.log(data);
+      const countries = data
+        .map(el => {
+          return `
+        <li>
+            <img src="${el.flags.svg}" width="30" alt="${el.flags.alt}">
+            <p>${el.name.common}</p>
+        </li>
+            `;
+        })
+        .join(' ');
+      console.log(countries);
+      listEl.insertAdjacentHTML('beforeend', countries);
+    }
+    console.log(data);
   });
 }
 
