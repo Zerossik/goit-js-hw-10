@@ -6,32 +6,36 @@ import { Notify } from 'notiflix';
 const DEBOUNCE_DELAY = 300;
 const inputEl = document.querySelector('#search-box');
 const listEl = document.querySelector('.country-list');
+const countriesInfoEl = document.querySelector('.country-info')
 
 function hendlerInputValue() {
   if (inputEl.value === '') {
+    listEl.innerHTML = ''
     return;
   }
 
-  getDate(inputEl.value.tream()).then(data => {
+  getDate(inputEl.value.trim()).then(data => {
+    
     if (data.length > 10) {
       Notify.info('Too many matches found. Please enter a more specific name.');
       return;
     } else if (data.length >= 2) {
-      console.log(data);
       const countries = data
-        .map(el => {
+        .map((el)=> {
           return `
-        <li>
-            <img src="${el.flags.svg}" width="30" alt="${el.flags.alt}">
-            <p>${el.name.common}</p>
-        </li>
-            `;
+          <li class="country-list__item">
+              <img src="${el.flags.svg}" width="30" alt="${el.flags.alt}">
+              <p>${el.name.common}</p>
+          </li>
+              `
         })
         .join(' ');
-      console.log(countries);
       listEl.insertAdjacentHTML('beforeend', countries);
+    }else {
+      listEl.innerHTML = '';
+      console.log('else');
     }
-    console.log(data);
+    
   });
 }
 
