@@ -71,3 +71,4 @@ function markupCountry(date) {
   countriesInfoEl.insertAdjacentHTML('beforeend', country);
 }
 inputEl.addEventListener('input', Debounce(hendlerInputValue, DEBOUNCE_DELAY));
+//done
