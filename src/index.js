@@ -3,7 +3,7 @@ import Debounce from 'lodash.debounce';
 import { getDate } from './fetchcountries';
 import { Notify } from 'notiflix';
 
-const DEBOUNCE_DELAY = 1000;
+const DEBOUNCE_DELAY = 300;
 const inputEl = document.querySelector('#search-box');
 const listEl = document.querySelector('.country-list');
 const countriesInfoEl = document.querySelector('.country-info');
@@ -15,31 +15,35 @@ function hendlerInputValue() {
     return;
   }
 
-  getDate(inputEl.value.trim()).then(data => {
-    if (data.length > 10) {
-      Notify.info('Too many matches found. Please enter a more specific name.');
-      listEl.innerHTML = '';
-      countriesInfoEl.innerHTML = '';
-      return;
-    } else if (data.length >= 2) {
-      countriesInfoEl.innerHTML = '';
-      const countries = data
-        .map(el => {
-          return `
+  getDate(inputEl.value.trim())
+    .then(data => {
+      if (data.length > 10) {
+        Notify.info(
+          'Too many matches found. Please enter a more specific name.'
+        );
+        listEl.innerHTML = '';
+        countriesInfoEl.innerHTML = '';
+        return;
+      } else if (data.length >= 2) {
+        countriesInfoEl.innerHTML = '';
+        const countries = data
+          .map(el => {
+            return `
           <li class="country-list__item">
               <img src="${el.flags.svg}" width="30" alt="${el.flags.alt}">
               <p>${el.name.common}</p>
           </li>
               `;
-        })
-        .join(' ');
-      listEl.insertAdjacentHTML('beforeend', countries);
-    } else if (data.length === 1) {
-      listEl.innerHTML = '';
-      markupCountry(data);
-      return;
-    }
-  });
+          })
+          .join(' ');
+        listEl.insertAdjacentHTML('beforeend', countries);
+      } else if (data.length === 1) {
+        listEl.innerHTML = '';
+        markupCountry(data);
+        return;
+      }
+    })
+    .catch(() => Notify.failure('Oops, there is no country with that name'));
 }
 function markupCountry(date) {
   const country = date.map(el => {
